@@ -1,8 +1,5 @@
 ---
 title: Test Data Generation
-articleGroup: Examples
-gettingStartedOrder: 1
-position: 1
 ---
 
 Sometimes you want to generate random data that seem realistic. For this we bundle the highly capable open-source Faker library [Faker.js](https://github.com/Marak/faker.js) which makes it simple to add rich, unique, on-the-fly test data to your scripts.

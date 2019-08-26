@@ -1,0 +1,11 @@
+{
+  "name": "@flood/element-docs",
+  "version": "1.0.0",
+  "description": "Flood Element documentation website",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "gatsby": "^2.13.64",
+    "gatsby-theme-apollo": "^1.1.0-alpha.2"
+  }
+}

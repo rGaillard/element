@@ -1,0 +1,6 @@
+{
+	"version": 2,
+	"name": "element-docs",
+	"builds": [{ "src": "**", "use": "@now/static" }],
+	"routes": [{ "src": "/(.*)", "dest": "https://flood-element.webflow.io/$1" }]
+}
