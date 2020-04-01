@@ -1,0 +1,34 @@
+{
+  "name": "docs",
+  "version": "1.0.10",
+  "description": "Doc tools is a small program that lints Element's documentation against Element's source code",
+  "author": "Ivan Vanderbyl <ivanvanderbyl@gmail.com>",
+  "homepage": "https://github.com/flood-io/element#readme",
+  "license": "MIT",
+  "main": "lib/docs.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.yarnpkg.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flood-io/element.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/flood-io/element/issues"
+  },
+  "dependencies": {
+    "commonmark": "^0.29.1",
+    "puppeteer": "^2.1.1",
+    "typescript": "^3.8.3"
+  }
+}

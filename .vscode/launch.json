@@ -46,6 +46,22 @@
 			"cwd": "${workspaceRoot}",
 			"console": "internalConsole",
 			"protocol": "inspector"
+		},
+
+		{
+			"name": "docs debug",
+			"type": "node",
+			"request": "launch",
+			"args": ["${workspaceFolder}/packages/docs/src/cli.ts"],
+			"skipFiles": ["<node_internals>/**"],
+			"runtimeArgs": ["--nolazy", "-r", "ts-node/register", "-r", "tsconfig-paths/register"],
+			"sourceMaps": true,
+			"cwd": "${workspaceRoot}",
+			"console": "internalConsole",
+			"protocol": "inspector",
+			"env": {
+				"TS_NODE_PROJECT": "${workspaceFolder}/packages/docs/tsconfig.json"
+			}
 		}
 	]
 }

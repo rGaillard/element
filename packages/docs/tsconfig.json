@@ -1,0 +1,16 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "dist",
+		"rootDir": ".",
+		"declaration": true,
+		"allowJs": true,
+		"noImplicitAny": false,
+		"noUnusedLocals": false,
+		"strictNullChecks": false,
+		"strictPropertyInitialization": false,
+		"noImplicitReturns": false
+	},
+	"include": ["**/*.ts"],
+	"files": ["./src/cli.ts"]
+}
