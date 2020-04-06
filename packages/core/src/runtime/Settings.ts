@@ -94,6 +94,12 @@ export interface TestSettings {
 	loopCount?: number
 
 	/**
+	 * Number of users to simulate, which equates to the number of browser tabs to launch
+	 * on this machine. Valid range: 1 to 28.
+	 */
+	threads?: number
+
+	/**
 	 * Specifies the time (in seconds) to wait between each action call.
 	 *
 	 * Waiting between actions simulates the behaviour of a real user as they read, think and act on the page's content.
@@ -240,6 +246,7 @@ export interface TestSettings {
  * The default settings for a Test. Any settings you provide are merged into these defaults.
  */
 export const DEFAULT_SETTINGS: ConcreteTestSettings = {
+	threads: 1,
 	waitUntil: false,
 	duration: -1,
 	loopCount: Infinity,

@@ -1,19 +1,20 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import {
-	runCommandLine,
 	runUntilExit,
-	ElementOptions,
+	// ElementOptions,
 	WorkRoot,
 	FloodProcessEnv,
-	TestCommander,
-	TestSettings,
+	// TestCommander,
+	// TestSettings,
 } from '@flood/element-core'
+
+import { runCommandLine } from '@flood/element-schedular'
 
 import { ConsoleReporter } from '../utils/ConsoleReporter'
 import { Argv, Arguments, CommandModule } from 'yargs'
 import createLogger from '../utils/Logger'
-import { watch } from 'chokidar'
-import { EventEmitter } from 'events'
+// import { watch } from 'chokidar'
+// import { EventEmitter } from 'events'
 import { checkFile } from './common'
 import sanitize from 'sanitize-filename'
 import { extname, basename, join, dirname, resolve } from 'path'
@@ -34,22 +35,22 @@ interface RunArguments extends Arguments {
 	'test-data-root'?: string
 }
 
-function setupDelayOverrides(args: RunArguments, testSettingOverrides: TestSettings) {
-	if (testSettingOverrides == null) testSettingOverrides = {}
+// function setupDelayOverrides(args: RunArguments, testSettingOverrides: TestSettings) {
+// 	if (testSettingOverrides == null) testSettingOverrides = {}
 
-	if (args.fastForward ?? false) {
-		testSettingOverrides.stepDelay = args.fastForward
-		testSettingOverrides.actionDelay = args.fastForward
-	} else if (args.slowMo ?? false) {
-		testSettingOverrides.stepDelay = args.slowMo ?? testSettingOverrides.stepDelay
-		testSettingOverrides.actionDelay = args.slowMo ?? testSettingOverrides.actionDelay
-	}
+// 	if (args.fastForward ?? false) {
+// 		testSettingOverrides.stepDelay = args.fastForward
+// 		testSettingOverrides.actionDelay = args.fastForward
+// 	} else if (args.slowMo ?? false) {
+// 		testSettingOverrides.stepDelay = args.slowMo ?? testSettingOverrides.stepDelay
+// 		testSettingOverrides.actionDelay = args.slowMo ?? testSettingOverrides.actionDelay
+// 	}
 
-	testSettingOverrides.actionDelay = args.actionDelay ?? testSettingOverrides.actionDelay
-	testSettingOverrides.actionDelay = args.stepDelay ?? testSettingOverrides.stepDelay
+// 	testSettingOverrides.actionDelay = args.actionDelay ?? testSettingOverrides.actionDelay
+// 	testSettingOverrides.actionDelay = args.stepDelay ?? testSettingOverrides.stepDelay
 
-	return testSettingOverrides
-}
+// 	return testSettingOverrides
+// }
 
 const cmd: CommandModule = {
 	command: 'run <file> [options]',
@@ -71,7 +72,7 @@ const cmd: CommandModule = {
 		logger.info(`workRootPath: ${workRootPath}`)
 		logger.info(`testDataPath: ${testDataPath}`)
 
-		const opts: ElementOptions = {
+		const opts = {
 			logger: logger,
 			testScript: file,
 			strictCompilation: args.strict ?? false,
@@ -89,12 +90,12 @@ const cmd: CommandModule = {
 			persistentRunner: false,
 		}
 
-		opts.testSettingOverrides = setupDelayOverrides(args, opts.testSettingOverrides)
+		// opts.testSettingOverrides = setupDelayOverrides(args, opts.testSettingOverrides)
 
-		if (args.watch) {
-			opts.persistentRunner = true
-			opts.testCommander = makeTestCommander(file)
-		}
+		// if (args.watch) {
+		// 	opts.persistentRunner = true
+		// 	opts.testCommander = makeTestCommander(file)
+		// }
 
 		runUntilExit(() => runCommandLine(opts))
 	},
@@ -200,29 +201,29 @@ const cmd: CommandModule = {
 
 export default cmd
 
-function makeTestCommander(file: string): TestCommander {
-	const commander = new EventEmitter()
+// function makeTestCommander(file: string): TestCommander {
+// 	const commander = new EventEmitter()
 
-	// hax
-	// const dir = path.dirname(file)
-	// const [first, ...rest] = path.basename(file)
-	// const globPath = path.join(dir, `{${first}}${rest.join('')}`)
+// 	// hax
+// 	// const dir = path.dirname(file)
+// 	// const [first, ...rest] = path.basename(file)
+// 	// const globPath = path.join(dir, `{${first}}${rest.join('')}`)
 
-	// console.log('watching', file, globPath)
+// 	// console.log('watching', file, globPath)
 
-	// watch(path.dirname(file)).on('change', (path, stats) => {
-	// console.log('changed dir', path, stats)
-	// })
+// 	// watch(path.dirname(file)).on('change', (path, stats) => {
+// 	// console.log('changed dir', path, stats)
+// 	// })
 
-	// TODO make this more reliable on linux
-	const watcher = watch(file, { persistent: true })
-	watcher.on('change', path => {
-		if (path === file) {
-			commander.emit('rerun-test')
-		}
-	})
-	return commander
-}
+// 	// TODO make this more reliable on linux
+// 	const watcher = watch(file, { persistent: true })
+// 	watcher.on('change', path => {
+// 		if (path === file) {
+// 			commander.emit('rerun-test')
+// 		}
+// 	})
+// 	return commander
+// }
 
 function getWorkRootPath(file: string, root?: string): string {
 	const ext = extname(file)

@@ -84,6 +84,32 @@ export class PuppeteerClient implements PuppeteerClientLike {
 	}
 }
 
+export async function launchWithoutPage(
+	passedOptions: Partial<ConcreteLaunchOptions> = {},
+): Promise<Browser> {
+	let options: ConcreteLaunchOptions = {
+		...defaultLaunchOptions,
+		...passedOptions,
+	}
+
+	if (!options.sandbox) {
+		options.args.push('--no-sandbox')
+		// launchArgs.args.push("--disable-setuid-sandbox");
+	}
+
+	if (options.debug) {
+		console.dir(options)
+	}
+
+	options = setupChrome(options)
+
+	// options.args.push('--single-process', '--no-zygote')
+
+	options.args.push('--auth-server-whitelist="hostname/domain"')
+
+	return puppeteer.launch(options)
+}
+
 export async function launch(
 	passedOptions: Partial<ConcreteLaunchOptions> = {},
 ): Promise<PuppeteerClient> {

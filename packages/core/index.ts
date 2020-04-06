@@ -79,7 +79,6 @@ export {
 /**
  * @docPage DSL
  */
-export { FloodProcessEnv } from './src/runtime-environment/types'
 
 import { FloodProcessEnv, nullFloodProcessEnv } from './src/runtime-environment/types'
 
@@ -117,6 +116,5 @@ export { suite } from './src/runtime/types'
 
 export * from './api'
 
-export { EvaluatedScript } from './src/runtime/EvaluatedScript'
-export { EvaluatedScriptLike } from './src/runtime/EvaluatedScriptLike'
+export { EvaluatedScriptLike, EvaluatedScript } from './src/runtime/EvaluatedScript'
 export { default as WorkRoot } from './src/runtime-environment/WorkRoot'
