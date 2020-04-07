@@ -60,7 +60,7 @@ describe('Test', () => {
 			name: 'Example Test',
 			description: 'This is an example test',
 			screenshotOnFailure: true,
-			waitTimeout: 30,
+			waitTimeout: 60,
 			responseTimeMeasurement: 'step',
 			consoleFilter: [],
 			blockedDomains: [],
@@ -70,6 +70,11 @@ describe('Test', () => {
 			extraHTTPHeaders: {},
 			launchArgs: [],
 			viewport: null,
+			stages: [
+				{ duration: '1m', target: 10 },
+				{ duration: '10m', target: 10 },
+				{ duration: '1m', target: 0 },
+			],
 		}
 		expect(test.settings).toEqual(defaultSettings)
 	})

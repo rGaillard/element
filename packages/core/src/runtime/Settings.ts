@@ -1,5 +1,6 @@
 import CustomDeviceDescriptors from '../utils/CustomDeviceDescriptors'
 import { Viewport } from 'puppeteer'
+import parseDuration from 'parse-duration'
 
 /**
  * Declares the settings for the test, overriding the settings constant exported in the test script.
@@ -94,12 +95,6 @@ export interface TestSettings {
 	loopCount?: number
 
 	/**
-	 * Number of users to simulate, which equates to the number of browser tabs to launch
-	 * on this machine. Valid range: 1 to 28.
-	 */
-	threads?: number
-
-	/**
 	 * Specifies the time (in seconds) to wait between each action call.
 	 *
 	 * Waiting between actions simulates the behaviour of a real user as they read, think and act on the page's content.
@@ -129,8 +124,9 @@ export interface TestSettings {
 
 	/**
 	 * Global wait timeout applied to all wait tasks.
+	 * This can be specified as a number (seconds) or an expression string 1m 30s
 	 */
-	waitTimeout?: number
+	waitTimeout?: number | string
 
 	/**
 	 * Specifies whether cookies should be cleared after each test loop.
@@ -240,13 +236,22 @@ export interface TestSettings {
 	 * The list of Chromium flags can be found at https://peter.sh/experiments/chromium-command-line-switches/
 	 */
 	launchArgs?: string[]
+
+	/**
+	 * Specifies the steps for ramping up and down load
+	 */
+	stages?: RampStage[]
+}
+
+export type RampStage = {
+	duration: string
+	target: number
 }
 
 /**
  * The default settings for a Test. Any settings you provide are merged into these defaults.
  */
 export const DEFAULT_SETTINGS: ConcreteTestSettings = {
-	threads: 1,
 	waitUntil: false,
 	duration: -1,
 	loopCount: Infinity,
@@ -273,6 +278,7 @@ export const DEFAULT_SETTINGS: ConcreteTestSettings = {
 	extraHTTPHeaders: {},
 	launchArgs: [],
 	viewport: null,
+	stages: [],
 }
 
 /**
@@ -290,22 +296,30 @@ export type ConcreteTestSettings = Required<TestSettings>
  * @internal
  */
 export function normalizeSettings(settings: TestSettings): TestSettings {
+	const { waitTimeout, actionDelay, stepDelay } = settings
+
 	// Convert user inputted seconds to milliseconds
-	if (typeof settings.waitTimeout === 'number' && settings.waitTimeout > 1e3) {
+	if (typeof waitTimeout === 'string') {
+		settings.waitTimeout = parseDuration(waitTimeout) / 1e3
+	} else if (typeof settings.waitTimeout === 'number' && settings.waitTimeout > 1e3) {
 		settings.waitTimeout = settings.waitTimeout / 1e3
 	} else if (Number(settings.waitTimeout) === 0) {
 		settings.waitTimeout = 30
 	}
 
 	// Ensure action delay is stored in seconds (assuming any value greater than 60 seconds would be ms)
-	if (typeof settings.actionDelay === 'number' && settings.actionDelay > 60) {
-		settings.actionDelay = settings.actionDelay / 1e3
+	if (typeof actionDelay === 'string') {
+		settings.actionDelay = parseDuration(actionDelay) / 1e3
+	} else if (typeof actionDelay === 'number' && actionDelay > 60) {
+		settings.actionDelay = actionDelay / 1e3
 	} else if (Number(settings.actionDelay) === 0) {
 		settings.actionDelay = DEFAULT_ACTION_WAIT_SECONDS
 	}
 
 	// Ensure step delay is stored in seconds
-	if (typeof settings.stepDelay === 'number' && settings.stepDelay > 60) {
+	if (typeof stepDelay === 'string') {
+		settings.stepDelay = parseDuration(stepDelay) / 1e3
+	} else if (typeof settings.stepDelay === 'number' && settings.stepDelay > 60) {
 		settings.stepDelay = settings.stepDelay / 1e3
 	} else if (Number(settings.stepDelay) === 0) {
 		settings.actionDelay = DEFAULT_STEP_WAIT_SECONDS

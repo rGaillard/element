@@ -10,6 +10,12 @@ export default function() {
 		loopCount: Infinity,
 		actionDelay: 0,
 		stepDelay: 0,
+		waitTimeout: '60s',
+		stages: [
+			{ duration: '1m', target: 10 },
+			{ duration: '10m', target: 10 },
+			{ duration: '1m', target: 0 },
+		],
 	})
 
 	step('Invalid Step', async () => {
