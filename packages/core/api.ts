@@ -17,8 +17,8 @@ export { nullRuntimeEnvironment } from './src/runtime-environment/NullRuntimeEnv
 
 export { TestCommander } from './src/Runner'
 
-import { launch, PuppeteerClient, launchWithoutPage } from './src/driver/Puppeteer'
-export { PuppeteerClient, launch, launchWithoutPage }
+import { launch, PuppeteerClient } from './src/driver/Puppeteer'
+export { PuppeteerClient, launch }
 
 export { TestScriptOptions } from './src/TestScriptOptions'
 export { TestScriptError } from './src/TestScriptError'

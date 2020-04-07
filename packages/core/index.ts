@@ -116,5 +116,6 @@ export { suite } from './src/runtime/types'
 
 export * from './api'
 
-export { EvaluatedScriptLike, EvaluatedScript } from './src/runtime/EvaluatedScript'
+export { EvaluatedScript } from './src/runtime/EvaluatedScript'
+export { EvaluatedScriptLike } from './src/runtime/EvaluatedScriptLike'
 export { default as WorkRoot } from './src/runtime-environment/WorkRoot'
