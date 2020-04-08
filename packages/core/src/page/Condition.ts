@@ -6,12 +6,13 @@ import { locatableToLocator } from '../runtime/toLocatorError'
 import { NullableLocatable } from '../runtime/types'
 
 import debugFactory from 'debug'
+import duration from '../utils/duration'
 const debug = debugFactory('element:page:condition')
 
 export { NullableLocatable }
 
 interface ConditionSettings {
-	waitTimeout: number
+	waitTimeout: number | string
 }
 
 /**
@@ -30,7 +31,7 @@ export abstract class Condition {
 	public abstract async waitForEvent(page: Page): Promise<unknown>
 
 	get timeout(): number {
-		return this.settings.waitTimeout * 1e3
+		return duration(this.settings.waitTimeout)
 	}
 }
 

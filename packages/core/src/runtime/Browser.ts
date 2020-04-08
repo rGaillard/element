@@ -29,6 +29,7 @@ import { addCallbacks } from './decorators/addCallbacks'
 import { autoWaitUntil } from './decorators/autoWait'
 import { locatableToLocator, toLocatorError } from './toLocatorError'
 import { Keyboard } from '../page/Keyboard'
+import duration from '../utils/duration'
 
 export const debug = debugFactory('element:runtime:browser')
 const debugScreenshot = debugFactory('element:runtime:browser:screenshot')
@@ -158,7 +159,8 @@ export class Browser<T> implements BrowserInterface {
 
 	@addCallbacks()
 	public async visit(url: string, options: NavigationOptions = {}): Promise<void> {
-		const timeout = this.settings.waitTimeout * 1e3
+		const timeout = duration(this.settings.waitTimeout)
+
 		let response
 		try {
 			response = await this.page.goto(url, {
