@@ -74,6 +74,7 @@ export {
 	DEFAULT_SETTINGS,
 	ConsoleMethod,
 	ResponseTiming,
+	RampStage,
 } from './src/runtime/Settings'
 
 /**
