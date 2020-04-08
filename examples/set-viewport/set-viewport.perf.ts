@@ -7,6 +7,12 @@ export const settings: TestSettings = {
 	// Automatically wait for elements before trying to interact with them
 	waitUntil: 'visible',
 	viewport: { width: 800, height: 600 },
+
+	stages: [
+		{ duration: '10s', target: 5 },
+		{ duration: '10s', target: 5 },
+		{ duration: '1s', target: 0 },
+	],
 }
 
 export default () => {
