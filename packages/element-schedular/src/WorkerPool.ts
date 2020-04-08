@@ -18,10 +18,15 @@ const identityFn = () => {
 	return
 }
 
+interface MergedStream extends NodeJS.ReadWriteStream {
+	add(source: NodeJS.ReadableStream | ReadonlyArray<NodeJS.ReadableStream>): MergedStream
+	isEmpty(): boolean
+}
+
 export class WorkerPool {
 	private readonly workers: Array<WorkerInterface>
-	public readonly stderr: NodeJS.ReadableStream
-	public readonly stdout: NodeJS.ReadableStream
+	public readonly stderr: MergedStream
+	public readonly stdout: MergedStream
 
 	constructor(public options: WorkerPoolOptions) {
 		this.workers = new Array(options.numWorkers)
@@ -29,31 +34,63 @@ export class WorkerPool {
 		const stdout = mergeStream()
 		const stderr = mergeStream()
 
-		const { maxRetries } = options
-
 		for (let i = 0; i < options.numWorkers; i++) {
-			const workerOptions: WorkerOptions = {
-				maxRetries,
-				workerId: i,
-			}
-
-			const worker = this.createWorker(workerOptions)
-			const workerStdout = worker.getStdout()
-			const workerStderr = worker.getStderr()
-
-			if (workerStdout) {
-				stdout.add(workerStdout)
-			}
-
-			if (workerStderr) {
-				stderr.add(workerStderr)
-			}
-
-			this.workers[i] = worker
+			this.addWorker()
 		}
 
 		this.stdout = stdout
 		this.stderr = stderr
+	}
+
+	addWorker() {
+		const id = this.workers.length
+		const { maxRetries } = this.options
+
+		const workerOptions: WorkerOptions = {
+			maxRetries,
+			workerId: id,
+		}
+
+		const worker = this.createWorker(workerOptions)
+		const workerStdout = worker.getStdout()
+		const workerStderr = worker.getStderr()
+
+		if (workerStdout) {
+			this.stdout.add(workerStdout)
+		}
+
+		if (workerStderr) {
+			this.stderr.add(workerStderr)
+		}
+
+		this.workers[this.workers.length] = worker
+	}
+
+	async removeLastWorker() {
+		const worker = this.workers[this.workers.length - 1]
+		if (!worker) return false
+		return this.removeWorker(worker.workerId)
+	}
+
+	async removeWorker(id: number): Promise<boolean> {
+		const worker = this.getWorkerById(id)
+		if (worker == null) return false
+
+		worker.send([ChildMessages.END, false], identityFn, identityFn)
+		// Schedule a force exit in case worker fails to exit gracefully so
+		// await worker.waitForExit() never takes longer than FORCE_EXIT_DELAY
+		let forceExited = false
+		const forceExitTimeout = setTimeout(() => {
+			worker.forceExit()
+			forceExited = true
+		}, FORCE_EXIT_DELAY)
+
+		await worker.waitForExit()
+		// Worker ideally exited gracefully, don't send force exit then
+		clearTimeout(forceExitTimeout)
+
+		this.workers.splice(id, 1)
+		return forceExited
 	}
 
 	send(workerId: number, request: ChildMessage, onStart: OnStart, onEnd: OnEnd): void {
