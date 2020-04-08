@@ -8,5 +8,5 @@
 	"references": [{ "path": "../compiler" }],
 	"include": ["**/*.ts"],
 
-	"files": ["./index.ts", "./api.ts"]
+	"files": ["./index.ts"]
 }

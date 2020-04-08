@@ -1,4 +1,4 @@
-import { FloodProcessEnv, WorkRoot } from '@flood/element-api'
+import { FloodProcessEnv, WorkRoot } from '@flood/element-core'
 import MetricIdentifier from './MetricIdentifier'
 import { Logger } from 'winston'
 export interface GridConfig {

@@ -1,4 +1,4 @@
-import { Entry } from '@flood/element-api'
+import { Entry } from '@flood/element-core'
 
 export function serializeResponseHeaders(entry: Entry): string {
 	const { response } = entry

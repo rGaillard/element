@@ -1,6 +1,6 @@
 import { newMetricIdentifierFromObject } from './MetricIdentifier'
 import { GridConfig } from './GridConfig'
-import { WorkRoot, FloodProcessEnv } from '@flood/element-api'
+import { WorkRoot, FloodProcessEnv } from '@flood/element-core'
 import findRoot from 'find-root'
 import { join } from 'path'
 import { ensureDirSync } from 'fs-extra'

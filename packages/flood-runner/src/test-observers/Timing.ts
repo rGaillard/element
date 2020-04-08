@@ -5,7 +5,7 @@ import {
 	NetworkRecorder,
 	ResponseTiming,
 	StructuredError,
-} from '@flood/element-api'
+} from '@flood/element-core'
 import { NetworkRecordingTestObserver } from './NetworkRecordingTestObserver'
 
 import debugFactory from 'debug'

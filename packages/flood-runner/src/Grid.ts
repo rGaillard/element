@@ -1,4 +1,4 @@
-import { runCommandLine, ElementOptions, TestObserver } from '@flood/element-api'
+import { runCommandLine, ElementOptions, TestObserver } from '@flood/element-core'
 import { Context } from './test-observers/Context'
 import { TimingObserver } from './test-observers/Timing'
 import { TracingObserver } from './test-observers/Tracing'

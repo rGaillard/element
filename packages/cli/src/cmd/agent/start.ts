@@ -1,7 +1,7 @@
 import { CommandModule, Arguments } from 'yargs'
 import { checkFile } from '../common'
 import run from '@flood/element-flood-runner'
-import { runUntilExit } from '@flood/element-api'
+import { runUntilExit } from '@flood/element-core'
 
 interface RunArguments extends Arguments {
 	file: string
