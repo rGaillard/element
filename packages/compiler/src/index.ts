@@ -41,9 +41,9 @@ export class Compiler {
 		return {
 			entry: this.sourceFile,
 			// mode: this.productionMode ? 'production' : 'development',
-			mode: 'none',
-			// devtool: 'cheap-module-eval-source-map',
-			devtool: 'cheap-module-source-map',
+			mode: 'production',
+			devtool: 'inline-cheap-module-source-map',
+			// devtool: 'cheap-module-source-map',
 			output: {
 				path: '/',
 				filename: join('bundle.js'),
@@ -60,12 +60,12 @@ export class Compiler {
 				// 	}),
 				// ],
 			},
-			cache: true,
+			cache: false,
+
 
 			plugins: [
 				new WebpackBar({
 					name: 'Script Compiler',
-					// reporters: ['fancy'],
 				}),
 			],
 
@@ -124,7 +124,8 @@ export class Compiler {
 					yeah({
 						stats,
 						content: fileSystem.data['bundle.js'].toString(),
-						sourceMap: fileSystem.data['bundle.js.map'].toString(),
+						sourceMap: '',
+						// sourceMap: fileSystem.data['bundle.js.map'].toString(),
 					})
 				}
 			})

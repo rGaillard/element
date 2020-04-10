@@ -17,6 +17,7 @@
 	"dependencies": {
 		"@flood/element": "^1.2.3-beta.2",
 		"@flood/element-api": "^1.2.3-beta.2",
+		"@flood/element-compiler": "^1.2.3-beta.0",
 		"@flood/element-core": "^1.2.3-beta.2",
 		"@flood/element-flood-runner": "^1.2.3-beta.1",
 		"boxen": "^3.0",
