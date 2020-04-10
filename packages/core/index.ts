@@ -136,12 +136,13 @@ export { runCommandLine, runUntilExit, ElementOptions } from './src/Element'
 export { RuntimeEnvironment, FloodProcessEnv } from './src/runtime-environment/types'
 export { nullRuntimeEnvironment } from './src/runtime-environment/NullRuntimeEnvironment'
 
-export { TestCommander } from './src/Runner'
+export { TestCommander, Runner } from './src/Runner'
+export { AsyncFactory } from './src/utils/Factory'
 
-import { launch, PuppeteerClient, launchWithoutPage } from './src/driver/Puppeteer'
-export { PuppeteerClient, launch, launchWithoutPage }
+export { connect, launch, PuppeteerClient, launchWithoutPage } from './src/driver/Puppeteer'
 
 export { TestScriptOptions } from './src/TestScriptOptions'
+export { default as PrecompiledTestScript } from './src/test-script/PrecompiledTestScript'
 export { TestScriptError } from './src/TestScriptError'
 export { ITestScript } from './src/ITestScript'
 export { mustCompileFile } from './src/TestScript'
