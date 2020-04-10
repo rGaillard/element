@@ -9,9 +9,10 @@ export const settings: TestSettings = {
 	viewport: { width: 800, height: 600 },
 
 	stages: [
-		{ duration: '10s', target: 5 },
-		{ duration: '10s', target: 5 },
-		{ duration: '1s', target: 0 },
+		{ duration: '10s', target: 10 },
+		{ duration: '1s', target: 1 },
+		{ duration: '5s', target: 5 },
+		{ duration: '5s', target: 0 },
 	],
 }
 
