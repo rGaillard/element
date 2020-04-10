@@ -5,6 +5,7 @@ import { updateCheck } from './utils/updateCheck'
 import { join } from 'path'
 import initCmd from './cmd/init'
 import runCmd from './cmd/run'
+import compileCmd from './cmd/compile'
 import planCmd from './cmd/plan'
 import generateCmd from './cmd/generate'
 import agentCmd from './cmd/agent'
@@ -57,6 +58,7 @@ export async function main(rootPath: string) {
 		.command(planCmd)
 		.command(runCmd)
 		.command(agentCmd)
+		.command(compileCmd)
 		.scriptName('element')
 		.updateStrings({
 			'Commands:': chalk.grey('Commands:\n'),
