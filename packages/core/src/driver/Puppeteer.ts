@@ -110,6 +110,16 @@ export async function launchWithoutPage(
 	return puppeteer.launch(options)
 }
 
+export async function connect(browserWSEndpoint: string) {
+	const browser = await puppeteer.connect({
+		browserWSEndpoint,
+	})
+
+	const page = await browser.newPage()
+
+	return new PuppeteerClient(browser, page)
+}
+
 export async function launch(
 	passedOptions: Partial<ConcreteLaunchOptions> = {},
 ): Promise<PuppeteerClient> {
