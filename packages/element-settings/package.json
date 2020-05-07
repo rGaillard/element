@@ -1,0 +1,29 @@
+{
+  "name": "@flood/element-settings",
+  "version": "1.2.3-beta.2",
+  "description": "> TODO: description",
+  "author": "Ivan Vanderbyl <ivanvanderbyl@gmail.com>",
+  "homepage": "https://github.com/flood-io/element#readme",
+  "license": "MIT",
+  "main": "lib/element-settings.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.yarnpkg.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flood-io/element.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/flood-io/element/issues"
+  }
+}

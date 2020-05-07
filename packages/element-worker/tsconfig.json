@@ -17,5 +17,5 @@
 	],
 
 	"include": ["src/**/*.ts", "index.d.ts"],
-	"files": ["./src/index.ts", "src/workers/threadChild.ts"]
+	"files": ["./src/index.ts", "src/worker/entry.ts"]
 }

@@ -1,6 +1,6 @@
 import { ThreadConnection } from '../ThreadConnection'
 import { WorkerConnection } from '../WorkerConnection'
-import { MessageChannel, MessagePort } from 'worker_threads'
+import { MessagePort } from 'worker_threads'
 import { EventEmitter } from 'events'
 
 class FakeMessagePort extends EventEmitter implements Partial<MessagePort> {
@@ -8,7 +8,7 @@ class FakeMessagePort extends EventEmitter implements Partial<MessagePort> {
 		this.emit('close')
 		return
 	}
-	postMessage(value: any, transferList?: Array<ArrayBuffer | MessagePort>): void {
+	postMessage(value: any): void {
 		this.emit('message', value)
 	}
 

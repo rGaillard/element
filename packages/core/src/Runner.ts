@@ -94,7 +94,8 @@ export class Runner {
 
 	constructor(
 		private clientFactory: AsyncFactory<PuppeteerClient>,
-		protected testCommander: TestCommander | undefined,
+		// DEPRECATED
+		protected testCommander: TestCommander | undefined | null,
 		private reporter: IReporter,
 		protected logger: Logger,
 		private testSettingOverrides: TestSettings,
@@ -237,7 +238,7 @@ export class PersistentRunner extends Runner {
 			testObserverFactory,
 		)
 
-		if (this.testCommander !== undefined) {
+		if (this.testCommander != null) {
 			this.testCommander.on('rerun-test', () => this.rerunTest())
 		}
 	}

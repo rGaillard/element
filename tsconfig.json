@@ -46,6 +46,7 @@
 		"**/dist",
 		"*.spec.ts",
 		"*.test.ts",
+		"**/__tests__/**",
 		"**/node_modules",
 		"node_modules"
 	]

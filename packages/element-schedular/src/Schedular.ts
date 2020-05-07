@@ -1,44 +1,54 @@
 import { TestSettings, EvaluatedScript, launchWithoutPage } from '@flood/element-core'
-import { cpus } from 'os'
-import { AsyncFactory } from '@flood/element-core/src/utils/Factory'
 import { WorkerPool } from './WorkerPool'
-import { ChildMessages } from './types'
+// import { ChildMessages } from './types'
+import { assertIsValidateStages } from './assertIsValidateStages'
+import { Plan } from './Plan'
 
 export class Schedular {
 	constructor(public settings: TestSettings) {}
 
-	public async run(testScriptFactory: AsyncFactory<EvaluatedScript>) {
-		const threadCount = this.settings.threads ?? 10
+	public async run(_testScript: EvaluatedScript) {
+		const stages = this.settings.stages
+		assertIsValidateStages(stages)
 
-		if (!this.checkThreadCount(threadCount))
-			throw new Error(`Thread count ${threadCount} too high for available CPUs, please decrease`)
+		// const testScript = await testScriptFactory()
 
-		const testScript = await testScriptFactory()
+		// this.timer = setInterval(this.updateTarget.bind(this), 1000)
 
-		console.log(testScript.script.source)
+		// const browser = await this.launchBrowser()
+		const plan = new Plan(stages)
 
-		const browser = await this.launchBrowser()
-
-		const pool = new WorkerPool({ maxRetries: 1, numWorkers: threadCount, setupArgs: [] })
-
+		const pool = new WorkerPool({ maxRetries: 1, numWorkers: plan.maxUsers, setupArgs: [] })
 		pool.stdout.pipe(process.stdout)
 		pool.stderr.pipe(process.stderr)
 
-		const wsURL = browser.wsEndpoint()
+		await plan.ticker(async (timestamp, target, total) => {
+			console.log(`tick: ${timestamp}, delta: ${target} total: ${total}`)
 
-		pool.sendEach(
-			[ChildMessages.CALL, 'connect', [wsURL, testScript.script.source]],
-			worker => {
-				console.log('worker start', worker.workerId)
-			},
-			err => {
-				if (err) {
-					console.log('worker error', err)
-				} else {
-					console.log('Success')
-				}
-			},
-		)
+			if (target == 1) {
+				await pool.addWorker()
+			} else if (target == -1) {
+				await pool.removeLastWorker()
+			} else {
+				console.log('incorrect target', target)
+			}
+		})
+
+		// const wsURL = browser.wsEndpoint()
+
+		// pool.sendEach(
+		// 	[ChildMessages.CALL, 'connect', [wsURL, testScript.script.source]],
+		// 	worker => {
+		// 		console.log('worker start', worker.workerId)
+		// 	},
+		// 	err => {
+		// 		if (err) {
+		// 			console.log('worker error', err)
+		// 		} else {
+		// 			console.log('Success')
+		// 		}
+		// 	},
+		// )
 
 		// const browser = await this.launchBrowser()
 		// for (let index = 0; index < threadCount; index++) {
@@ -48,37 +58,33 @@ export class Schedular {
 		// 	await new Promise(yeah => setTimeout(yeah, 1e3))
 		// }
 
-		await pool.waitForExit()
-		await new Promise(yeah => setTimeout(yeah, 1e3))
-		await browser.close()
+		// await pool.waitForExit()
+		// await new Promise(yeah => setTimeout(yeah, 1e3))
+		// await browser.close()
 
-		process.on('SIGQUIT', async () => {
-			await browser.close()
-		})
+		// process.on('SIGQUIT', async () => {
+		// 	await browser.close()
+		// })
 
-		process.on('SIGINT', async () => {
-			await browser.close()
-		})
+		// process.on('SIGINT', async () => {
+		// 	await browser.close()
+		// })
 
-		process.once('SIGUSR2', async () => {
-			await browser.close()
-			process.kill(process.pid, 'SIGUSR2')
-		})
+		// process.once('SIGUSR2', async () => {
+		// 	await browser.close()
+		// 	process.kill(process.pid, 'SIGUSR2')
+		// })
 	}
 
 	public async stop() {
 		return null
 	}
 
-	private async launchBrowser() {
+	public async launchBrowser() {
 		const browser = await launchWithoutPage({ headless: false })
 		for (const page of await browser.pages()) {
 			await page.close()
 		}
 		return browser
-	}
-
-	private checkThreadCount(count: number): boolean {
-		return count <= cpus().length * 7
 	}
 }

@@ -4,7 +4,9 @@ import { EvaluatedScript, mustCompileFile, ElementOptions } from '@flood/element
 export async function runCommandLine(opts: ElementOptions): Promise<void> {
 	const { logger, testScript } = opts
 
-	const runner = new Schedular({})
+	const compiledScript = new EvaluatedScript(opts.runEnv, await mustCompileFile(testScript))
+
+	const runner = new Schedular(compiledScript.settings)
 
 	const installSignalHandlers = true
 
@@ -24,9 +26,5 @@ export async function runCommandLine(opts: ElementOptions): Promise<void> {
 
 	logger.debug(`Loading test script: ${testScript}`)
 
-	const testScriptFactory = async (): Promise<EvaluatedScript> => {
-		return new EvaluatedScript(opts.runEnv, await mustCompileFile(testScript))
-	}
-
-	await runner.run(testScriptFactory)
+	await runner.run(compiledScript)
 }

@@ -85,13 +85,14 @@ export class Plan {
 	) {
 		return new Promise(yeah => {
 			const plan = this.make()
-
+			let previousTimeout = 0
 			const internal = () => {
 				const step = plan.shift()
 				if (step) {
 					const [timeout] = step
 					Promise.resolve(onTick(...step)).then(() => {
-						setTimeout(internal, timeout)
+						setTimeout(internal, timeout - previousTimeout)
+						previousTimeout = timeout
 					})
 				} else {
 					yeah()
