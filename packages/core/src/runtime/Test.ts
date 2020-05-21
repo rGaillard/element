@@ -168,6 +168,26 @@ export default class Test implements ITest {
 			}
 
 			debug('running steps')
+			const executeStep = async (step: Step): Promise<void> => {
+				browser.customContext = step
+
+				await Promise.race([
+					this.runStep(testObserver, browser, step, testDataRecord),
+					cancelToken.promise,
+				])
+
+				if (cancelToken.isCancellationRequested) return
+
+				if (this.failed) {
+					console.log('failed, bailing out of steps')
+					throw Error('test failed')
+				}
+			}
+			const stepOnly = this.steps.find(opt => opt.options.only)
+			if (stepOnly) {
+				console.log(`Skip other tests except test ${stepOnly.name}`)
+				return await executeStep(stepOnly)
+			}
 			for (const step of this.steps) {
 				const { once, predicate, skip, pending } = step.options
 				if (pending) {
@@ -188,20 +208,7 @@ export default class Test implements ITest {
 						continue
 					}
 				}
-
-				browser.customContext = step
-
-				await Promise.race([
-					this.runStep(testObserver, browser, step, testDataRecord),
-					cancelToken.promise,
-				])
-
-				if (cancelToken.isCancellationRequested) return
-
-				if (this.failed) {
-					console.log('failed, bailing out of steps')
-					throw Error('test failed')
-				}
+				await executeStep(step)
 			}
 		} catch (err) {
 			console.log('error -> failed', err)

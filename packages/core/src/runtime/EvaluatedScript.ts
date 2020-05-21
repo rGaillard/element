@@ -231,6 +231,11 @@ export class EvaluatedScript implements TestScriptErrorMapper, EvaluatedScriptLi
 			captureStep([name, { ...option, skip: true }, fn])
 		}
 
+		step.only = async (name: string, ...optionsOrFn: any[]) => {
+			const [option, fn] = extractOptionsAndCallback(optionsOrFn)
+			captureStep([name, { ...option, only: true }, fn])
+		}
+
 		const context = {
 			setup: (setupSettings: TestSettings) => {
 				Object.assign(rawSettings, setupSettings)
