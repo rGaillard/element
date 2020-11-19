@@ -1,6 +1,0 @@
-export * from './CSS'
-export * from './LinkText'
-export * from './TagName'
-export * from './VisibleTextLocator'
-export * from './XPath'
-export * from './EvalLocator'
